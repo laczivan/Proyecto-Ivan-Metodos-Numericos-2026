@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Método de Bisección</title>
+</head>
+<body>
+    <section>
+        <div class="container mt-5">
+            <h2>Método de Bisección</h2>
+            
+            <form th:action="@{/raices/biseccion}" th:object="${biseccion}" method="post" class="card p-4 shadow-sm">
+                
+                <div class="mb-3">
+                    <label for="xl" class="form-label">Valor de XL</label>
+                    <input type="number" step="any" class="form-control" id="xl" th:field="*{xl}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="xu" class="form-label">Valor de XU</label>
+                    <input type="number" step="any" class="form-control" id="xu" th:field="*{xu}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fx" class="form-label">Funcion FX</label>
+                    <input type="text" class="form-control" id="fx" th:field="*{fx}" pattern="[a-zA-Z0-9\+\-\*\/\^\(\)\.\s]+" title="Solo se permiten caracteres alfanuméricos y operadores matemáticos" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="er" class="form-label">Error relativo aprox.</label>
+                    <input type="number" step="any" class="form-control" id="er" th:field="*{er}" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="maximoIteraciones" class="form-label">Maximo de iteraciones</label>
+                    <input type="number" class="form-control" id="maximoIteraciones" th:field="*{maximoIteraciones}" required>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Resolver</button>
+                    <a th:href="@{/raices/index}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

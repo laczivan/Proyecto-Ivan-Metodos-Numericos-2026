@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/base :: layout('Inicio - Métodos Numéricos', ~{::section})}">
+<body>
+    <section>
+        <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+            <div class="container-fluid py-5 text-center">
+                <h1 class="display-5 fw-bold" th:text="${welcomeMessage}">Bienvenido</h1>
+                <p class="col-md-8 fs-4 mx-auto">
+                    Selecciona un método numérico en la barra superior para comenzar a realizar cálculos con integración de Symja.
+                </p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

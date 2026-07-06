@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{fragments/base :: layout('Solución de Bisección', ~{::section})}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <section>
+        <div class="container mt-4">
+            <h2 class="mb-4">Resultado del Método de Bisección</h2>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Iteración</th>
+                                <th>XL</th>
+                                <th>XU</th>
+                                <th>XR</th>
+                                <th>FXL</th>
+                                <th>FXU</th>
+                                <th>FXR</th>
+                                <th>Error relativo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="row : ${resultados}">
+                                <td th:text="${row.iteracion}">1</td>
+                                <td th:text="${#numbers.formatDecimal(row.xl, 1, 4)}">0.0</td>
+                                <td th:text="${#numbers.formatDecimal(row.xu, 1, 4)}">0.0</td>
+                                <td th:text="${#numbers.formatDecimal(row.xr, 1, 4)}">0.0</td>
+                                <td th:text="${#numbers.formatDecimal(row.fxl, 1, 4)}">0.0</td>
+                                <td th:text="${#numbers.formatDecimal(row.fxu, 1, 4)}">0.0</td>
+                                <td th:text="${#numbers.formatDecimal(row.fxr, 1, 4)}">0.0</td>
+                                <td th:text="${row.iteracion == 1 ? '100.00%' : #numbers.formatDecimal(row.er, 1, 2) + '%'}">100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-end">
+                    <a th:href="@{/raices}" class="btn btn-secondary">Regresar</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/base :: layout('Raíces de Ecuaciones', ~{::section})}">
+<body>
+    <section>
+        <div class="container mt-4">
+            <h2>Unidad II - Raíces de Ecuaciones</h2>
+            <p class="lead">
+                Cálculo de raíces para funciones de polinomios exponenciales utilizando distintos métodos numéricos para su obtención.
+            </p>
+
+            <div class="row mt-4">
+                <!-- Métodos Cerrados -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Métodos Cerrados</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a th:href="@{/raices/biseccion}" class="text-decoration-none">Método de Bisección</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a th:href="@{/raices/regla-falsa}" class="text-decoration-none">Método de Regla Falsa</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métodos Abiertos -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">Métodos Abiertos</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a th:href="@{/raices/punto-fijo}" class="text-decoration-none">Método de Iteración de Punto Fijo</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a th:href="@{/raices/newton-raphson}" class="text-decoration-none">Método de Newton-Raphson</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a th:href="@{/raices/secante}" class="text-decoration-none">Método de la Secante</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a th:href="@{/raices/secante-modificado}" class="text-decoration-none">Método de la Secante Modificado</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+    </section>
+</body>
+</html>

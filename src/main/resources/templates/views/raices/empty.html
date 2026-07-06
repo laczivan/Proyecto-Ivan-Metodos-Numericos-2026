@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/base :: layout('Método en construcción', ~{::section})}">
+<body>
+    <section>
+        <div class="container mt-5 text-center">
+            <div class="alert alert-warning shadow-sm" role="alert">
+                <h4 class="alert-heading">🚧 Método en construcción</h4>
+                <p>
+                    Este método aún no ha sido implementado.<br>
+                    Pronto estará disponible con su lógica matemática completa.
+                </p>
+                <hr>
+                <a th:href="@{/raices}" class="btn btn-primary">
+                    ⬅ Volver a raíces
+                </a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
