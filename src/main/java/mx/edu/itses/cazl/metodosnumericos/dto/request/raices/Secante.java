@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO para la captura de parámetros de entrada del Método de la Secante.
+ */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Biseccion {
+@Builder
+public class Secante {
 
-    private double xl; 
-    private double xu; 
-    private String fx; 
-    private double er; 
-
+    private double xiMenos1;
+    private double xi;
+    private String fx;
+    private double er;
     private int maximoIteraciones;
 }

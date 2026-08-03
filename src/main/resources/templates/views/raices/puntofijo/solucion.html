@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Resultados - Punto Fijo</title>
+</head>
+<body>
+    <section class="container my-4">
+        <h2 class="mb-4 text-primary">Resultados: Método de Iteración de Punto Fijo</h2>
+
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover table-striped table-bordered mb-0 align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="text-center">Iteración</th>
+                        <th scope="col" class="text-center">X0</th>
+                        <th scope="col" class="text-center">G(X0)</th>
+                        <th scope="col" class="text-center">Error Relativo (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="fila : ${resultados}">
+                        <td class="text-center fw-bold" th:text="${fila.iteracion}">1</td>
+                        <td class="text-end" th:text="${#numbers.formatDecimal(fila.x0, 1, 6)}">0.0</td>
+                        <td class="text-end" th:text="${#numbers.formatDecimal(fila.gx0, 1, 6)}">0.0</td>
+                        <td class="text-end" th:text="${#numbers.formatDecimal(fila.er, 1, 6)}">0.0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4">
+            <a th:href="@{/raices}" class="btn btn-primary">
+                <i class="bi bi-arrow-left me-1"></i> Regresar
+            </a>
+        </div>
+    </section>
+</body>
+</html>

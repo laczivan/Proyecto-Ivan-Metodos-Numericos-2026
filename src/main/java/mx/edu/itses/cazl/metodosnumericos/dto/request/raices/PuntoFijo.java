@@ -6,15 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Biseccion {
-
-    private double xl; 
-    private double xu; 
-    private String fx; 
-    private double er; 
-
+@Builder
+public class PuntoFijo {
+    private double x0;
+    private String gx;
+    private double er;
     private int maximoIteraciones;
 }

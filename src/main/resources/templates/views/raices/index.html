@@ -1,62 +1,92 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{fragments/base :: layout('Raíces de Ecuaciones', ~{::section})}">
-<body>
-    <section>
-        <div class="container mt-4">
-            <h2>Unidad II - Raíces de Ecuaciones</h2>
-            <p class="lead">
-                Cálculo de raíces para funciones de polinomios exponenciales utilizando distintos métodos numéricos para su obtención.
-            </p>
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout/base :: layout(~{::title}, ~{::section})}"
+>
+  <head>
+    <title>Unidad II.- Raíces de Ecuaciones</title>
+  </head>
+  <body>
+    <section class="container my-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+          <h3 class="mb-0">
+            <i class="bi bi-diagram-3-fill me-2"></i>Unidad II.- Raíces de
+            Ecuaciones
+          </h3>
+        </div>
+        <div class="card-body">
+          <p class="lead text-muted">
+            Cálculo de raíces para funciones de polinomios exponenciales
+            utilizando distintos métodos numéricos para su obtención.
+          </p>
+          <hr />
 
-            <div class="row mt-4">
-                <!-- Métodos Cerrados -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Métodos Cerrados</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <a th:href="@{/raices/biseccion}" class="text-decoration-none">Método de Bisección</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a th:href="@{/raices/regla-falsa}" class="text-decoration-none">Método de Regla Falsa</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+          <div class="row g-4 mt-2">
+            <!-- Métodos Cerrados -->
+            <div class="col-md-6">
+              <div class="card h-100 border-primary shadow-sm">
+                <div class="card-header bg-primary text-white font-weight-bold">
+                  <i class="bi bi-box-seam me-2"></i>Métodos Cerrados
                 </div>
-
-                <!-- Métodos Abiertos -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0">Métodos Abiertos</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <a th:href="@{/raices/punto-fijo}" class="text-decoration-none">Método de Iteración de Punto Fijo</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a th:href="@{/raices/newton-raphson}" class="text-decoration-none">Método de Newton-Raphson</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a th:href="@{/raices/secante}" class="text-decoration-none">Método de la Secante</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a th:href="@{/raices/secante-modificado}" class="text-decoration-none">Método de la Secante Modificado</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="list-group list-group-flush">
+                  <a
+                    th:href="@{/raices/biseccion}"
+                    class="list-group-item list-group-item-action d-flex align-items-center"
+                  >
+                    <i class="bi bi-calculator me-2 text-primary"></i> Método de
+                    Bisección
+                  </a>
+                  <a
+                    th:href="@{/raices/reglafalsa}"
+                    class="list-group-item list-group-item-action d-flex align-items-center"
+                  >
+                    <i class="bi bi-calculator-fill me-2 text-primary"></i>
+                    Método de Regla Falsa
+                  </a>
                 </div>
+              </div>
             </div>
 
-           
+            <!-- Métodos Abiertos -->
+            <div class="col-md-6">
+              <div class="card h-100 border-secondary shadow-sm">
+                <div
+                  class="card-header bg-secondary text-white font-weight-bold"
+                >
+                  <i class="bi bi-unlock me-2"></i>Métodos Abiertos
+                </div>
+                <div class="list-group list-group-flush">
+                  <a
+                    th:href="@{/raices/puntofijo}"
+                    class="list-group-item list-group-item-action d-flex align-items-center"
+                  >
+                    <i class="bi bi-arrow-repeat me-2 text-secondary"></i>
+                    Método de Iteración de Punto Fijo
+                  </a>
+                  <a
+                    th:href="@{/raices/newtonraphson}"
+                    class="list-group-item list-group-item-action d-flex align-items-center gap-2"
+                  >
+                    <i class="bi bi-graph-up-arrow"></i>
+                    <span>Método de Newton-Raphson</span>
+                  </a>
+                  <a
+                    th:href="@{/raices/secante}"
+                    class="list-group-item list-group-item-action d-flex align-items-center"
+                  >
+                    <i class="bi bi-slash-lg me-2 text-secondary"></i> Método de
+                    la Secante
+                  </a>
+                  <a th:href="@{/raices/secante-modificada}" class="text-decoration-none fw-bold">
+            <i class="bi bi-calculator me-2"></i>Método de la Secante Modificado
+        </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
-</body>
+  </body>
 </html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Newton-Raphson - Métodos Numéricos</title>
+</head>
+<body>
+<section class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Método de Newton-Raphson</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Alerta de mensaje de error -->
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${errorMessage}">Error procesando los datos.</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form th:action="@{/raices/newtonraphson}" th:object="${newtonRaphson}" method="post">
+                        
+                        <div class="mb-3">
+                            <label for="fx" class="form-label">Función F(x)</label>
+                            <input type="text" class="form-control" id="fx" th:field="*{fx}" 
+                                   placeholder="Ej. x^3 - 2*x - 5" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="xi" class="form-label">Valor inicial (Xi)</label>
+                            <input type="number" step="any" class="form-control" id="xi" th:field="*{xi}" required />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="er" class="form-label">Error relativo aprox. (%)</label>
+                                <input type="number" step="any" class="form-control" id="er" th:field="*{er}" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="maximoIteraciones" class="form-label">Máximo de iteraciones</label>
+                                <input type="number" class="form-control" id="maximoIteraciones" th:field="*{maximoIteraciones}" min="1" required />
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a th:href="@{/raices}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Resolver</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

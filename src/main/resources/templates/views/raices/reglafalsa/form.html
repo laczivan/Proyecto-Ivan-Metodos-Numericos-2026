@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
 <head>
-    <title>Método de Bisección</title>
+    <title>Método de Regla Falsa</title>
 </head>
 <body>
     <section class="container my-4">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="bi bi-calculator me-2"></i>Parámetros - Método de Bisección</h4>
+                <h4 class="mb-0"><i class="bi bi-calculator-fill me-2"></i>Parámetros - Método de Regla Falsa</h4>
             </div>
             <div class="card-body">
                 <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -17,7 +17,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
-                <form th:action="@{/raices/biseccion}" th:object="${biseccion}" method="post">
+                <form th:action="@{/raices/reglafalsa}" th:object="${reglaFalsa}" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="xl" class="form-label fw-bold">Valor de XL</label>
@@ -30,18 +30,18 @@
                         </div>
 
                         <div class="col-12">
-                            <label for="fx" class="form-label fw-bold">Funcion FX</label>
+                            <label for="fx" class="form-label fw-bold">Función FX</label>
                             <input type="text" class="form-control" id="fx" th:field="*{fx}" required placeholder="Ej. x^3 - 2*x - 5" />
                             <div class="form-text">Introduce una función matemática válida expresada en términos de 'x'.</div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="er" class="form-label fw-bold">Error relativo aprox.</label>
+                            <label for="er" class="form-label fw-bold">Error relativo aprox. (%)</label>
                             <input type="number" step="any" class="form-control" id="er" th:field="*{er}" required placeholder="Ej. 0.001" />
                         </div>
 
                         <div class="col-md-6">
-                            <label for="maximoIteraciones" class="form-label fw-bold">Maximo de iteraciones</label>
+                            <label for="maximoIteraciones" class="form-label fw-bold">Máximo de iteraciones</label>
                             <input type="number" class="form-control" id="maximoIteraciones" th:field="*{maximoIteraciones}" required placeholder="Ej. 100" />
                         </div>
                     </div>
