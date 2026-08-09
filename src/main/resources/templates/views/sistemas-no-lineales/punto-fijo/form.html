@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Iteración de Punto Fijo - Sistemas No Lineales</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-diagram-3-fill me-2"></i>Punto Fijo (Sistemas No Lineales - 2 Ecuaciones)</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Error de procesamiento</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/sistemas-no-lineales/punto-fijo}" th:object="${puntoFijoRequest}" method="post">
+                    
+                    <!-- Despejes g1(x,y) y g2(x,y) -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-function me-2"></i>Funciones Despejadas</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="g1" class="form-label fw-bold">Despeje de x = g1(x, y)</label>
+                            <input type="text" class="form-control" id="g1" th:field="*{g1}" 
+                                   required placeholder="Ej: sqrt(10 - x*y)" />
+                            <div class="form-text">Función $g_1(x, y)$ despejada para la variable $x$.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="g2" class="form-label fw-bold">Despeje de y = g2(x, y)</label>
+                            <input type="text" class="form-control" id="g2" th:field="*{g2}" 
+                                   required placeholder="Ej: sqrt((57 - y)/(3*x))" />
+                            <div class="form-text">Función $g_2(x, y)$ despejada para la variable $y$.</div>
+                        </div>
+                    </div>
+
+                    <!-- Valores Iniciales X0 e Y0 -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-geo-alt me-2"></i>Valores Iniciales</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="x0" class="form-label fw-bold">Valor Inicial X0</label>
+                            <input type="number" step="any" class="form-control" id="x0" th:field="*{x0}" required placeholder="0.0" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="y0" class="form-label fw-bold">Valor Inicial Y0</label>
+                            <input type="number" step="any" class="form-control" id="y0" th:field="*{y0}" required placeholder="0.0" />
+                        </div>
+                    </div>
+
+                    <!-- Tolerancia y Máximo de Iteraciones -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-sliders me-2"></i>Criterios de Convergencia</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="tolerancia" class="form-label fw-bold">Tolerancia Error Relativo (%)</label>
+                            <input type="number" step="any" class="form-control" id="tolerancia" th:field="*{tolerancia}" required placeholder="Ej. 0.0001" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="maximoIteraciones" class="form-label fw-bold">Máximo de Iteraciones</label>
+                            <input type="number" class="form-control" id="maximoIteraciones" th:field="*{maximoIteraciones}" required placeholder="Ej. 100" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/sistemas-no-lineales}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-1"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-play-circle me-1"></i>Resolver
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

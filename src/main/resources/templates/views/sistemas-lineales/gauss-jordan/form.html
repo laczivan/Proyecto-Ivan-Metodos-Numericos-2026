@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Método de Gauss-Jordan</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header text-white" style="background-color: #fd7e14;">
+                <h4 class="mb-0"><i class="bi bi-grid-3x3 me-2"></i>Método de Gauss-Jordan</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Mensaje de Error</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Selector de Dimensión del Sistema -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Selecciona el orden del sistema de ecuaciones:</label>
+                    <div class="btn-group w-100" role="group">
+                        <a th:href="@{/sistemas-lineales/gauss-jordan(dim=2)}" 
+                           th:classappend="${gaussJordanDTO.dimension == 2} ? 'btn-warning text-white' : 'btn-outline-warning'" 
+                           class="btn">Sistema 2 x 2</a>
+                        <a th:href="@{/sistemas-lineales/gauss-jordan(dim=3)}" 
+                           th:classappend="${gaussJordanDTO.dimension == 3} ? 'btn-warning text-white' : 'btn-outline-warning'" 
+                           class="btn">Sistema 3 x 3</a>
+                        <a th:href="@{/sistemas-lineales/gauss-jordan(dim=4)}" 
+                           th:classappend="${gaussJordanDTO.dimension == 4} ? 'btn-warning text-white' : 'btn-outline-warning'" 
+                           class="btn">Sistema 4 x 4</a>
+                    </div>
+                </div>
+
+                <!-- Captura de la Matriz Coeficientes [A] y Vector [B] -->
+                <form th:action="@{/sistemas-lineales/gauss-jordan/calcular}" th:object="${gaussJordanDTO}" method="post">
+                    <input type="hidden" th:field="*{dimension}" />
+
+                    <h5 class="fw-bold mb-3 text-secondary text-center">
+                        Matriz de Coeficientes [A] y Vector Independiente [B]
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-borderless text-center align-middle mx-auto" style="max-width: 650px;">
+                            <thead>
+                                <tr>
+                                    <th th:each="col, iter : *{matrizA[0]}" th:text="'x' + ${iter.index + 1}">x</th>
+                                    <th class="border-start border-2 border-dark text-primary">B</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="row, rStat : *{matrizA}">
+                                    <td th:each="col, cStat : *{matrizA[__${rStat.index}__]}">
+                                        <input type="number" step="any" class="form-control text-center font-monospace" 
+                                               th:field="*{matrizA[__${rStat.index}__][__${cStat.index}__]}" 
+                                               required placeholder="0.0" />
+                                    </td>
+                                    <td class="border-start border-2 border-dark">
+                                        <input type="number" step="any" class="form-control text-center font-monospace border-primary" 
+                                               th:field="*{vectorB[__${rStat.index}__]}" 
+                                               required placeholder="0.0" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a th:href="@{/sistemas-lineales}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-play-circle me-1"></i> Resolver
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

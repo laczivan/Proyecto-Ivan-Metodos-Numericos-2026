@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Unidad III.- Sistemas Lineales</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-grid-3x3-gap-fill me-2"></i>Unidad III.- Sistemas de Ecuaciones Lineales
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="lead text-muted">
+                    Métodos directos e iterativos para la resolución de sistemas de ecuaciones lineales y cálculo de determinantes.
+                </p>
+                <hr />
+                <div class="row g-4 mt-2">
+                    
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm" style="border-color: #fd7e14;">
+                            <div class="card-header text-white fw-bold" style="background-color: #fd7e14;">
+                                <i class="bi bi-cpu me-2"></i>Métodos Directos
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a th:href="@{/sistemas-lineales/determinantes}" 
+                                   class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="bi bi-grid-3x3-gap-fill me-2" style="color: #fd7e14;"></i>
+                                    Determinantes en Métodos Directos
+                                </a>
+                                <a th:href="@{/sistemas-lineales/eliminacion-gaussiana}" 
+                                   class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="bi bi-cpu me-2" style="color: #fdca14;"></i>
+                                    Eliminación Gaussiana
+                                </a>
+                                <a th:href="@{/sistemas-lineales/gauss-jordan}" 
+                                   class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="bi bi-grid-3x3 me-2" style="color: #fdd214;"></i>
+                                    Método de Gauss-Jordan
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm" style="border-color: #8c0b2b;">
+                            <div class="card-header text-white fw-bold" style="background-color: #e84051;">
+                                <i class="bi bi-cpu me-2"></i>Métodos Iterativos
+                            </div>
+                            <div class="list-group list-group-flush">
+                                
+                                <a th:href="@{/sistemas-lineales/jacobi}" 
+                                   class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="bi bi-grid-3x3 me-2" style="color: #fd1452;"></i>
+                                    Método de Jacobi
+                                </a>
+                                <a th:href="@{/sistemas-lineales/gauss-seidel}" 
+                                   class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="bi bi-grid-3x3 me-2" style="color: #fd145e;"></i>
+                                    Método de Gauss-Seidel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm" style="border-color: #8c0b2b62;">
+                            <div class="card-header text-white fw-bold" style="background-color: #72040f;">
+                                <i class="bi bi-cpu me-2"></i>Sistemas de Ecuaciones no Lineales para 2 ecuaciones
+                            </div>
+                            <div class="list-group list-group-flush">
+                                
+                                <a th:href="@{/sistemas-no-lineales/punto-fijo}" 
+                                   class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="bi bi-grid-3x3 me-2" style="color: #fd1452;"></i>
+                                    Iteracion de Punto Fijo
+                                </a>
+                                <a th:href="@{/sistemas-no-lineales/newton-raphson}" 
+                                   class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="bi bi-grid-3x3 me-2" style="color: #9f103e;"></i>
+                                    Newton Raphson
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

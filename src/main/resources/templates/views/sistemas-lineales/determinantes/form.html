@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Cálculo de Determinantes</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Determinantes en Métodos Directos</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Mensaje de Error</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Selector de Dimensión de Matriz -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Selecciona el orden de la matriz cuadrática:</label>
+                    <div class="btn-group w-100" role="group">
+                        <a th:href="@{/sistemas-lineales/determinantes(dim=2)}" 
+                           th:classappend="${determinanteDTO.dimension == 2} ? 'btn-primary' : 'btn-outline-primary'" 
+                           class="btn">Matriz 2 x 2</a>
+                        <a th:href="@{/sistemas-lineales/determinantes(dim=3)}" 
+                           th:classappend="${determinanteDTO.dimension == 3} ? 'btn-primary' : 'btn-outline-primary'" 
+                           class="btn">Matriz 3 x 3</a>
+                        <a th:href="@{/sistemas-lineales/determinantes(dim=4)}" 
+                           th:classappend="${determinanteDTO.dimension == 4} ? 'btn-primary' : 'btn-outline-primary'" 
+                           class="btn">Matriz 4 x 4</a>
+                    </div>
+                </div>
+
+                <!-- Captura de Matriz Coeficientes -->
+                <form th:action="@{/sistemas-lineales/determinantes/calcular}" th:object="${determinanteDTO}" method="post">
+                    <input type="hidden" th:field="*{dimension}" />
+
+                    <h5 class="fw-bold mb-3 text-secondary text-center">
+                        Ingrese los Coeficientes (Matriz <span th:text="${determinanteDTO.dimension} + 'x' + ${determinanteDTO.dimension}"></span>)
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-borderless text-center align-middle mx-auto" style="max-width: 500px;">
+                            <tbody>
+                                <tr th:each="row, rStat : *{matriz}">
+                                    <td th:each="col, cStat : *{matriz[__${rStat.index}__]}">
+                                        <input type="number" step="any" class="form-control text-center font-monospace" 
+                                               th:field="*{matriz[__${rStat.index}__][__${cStat.index}__]}" 
+                                               required placeholder="0.0" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a th:href="@{/sistemas-lineales}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-play-circle me-1"></i> Resolver
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

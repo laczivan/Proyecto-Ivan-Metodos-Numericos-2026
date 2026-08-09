@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Solución - Newton-Raphson No Lineal</title>
+</head>
+<body>
+    <section class="container-fluid my-4 px-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="bi bi-check-circle-fill text-success me-2"></i>Resultados - Newton-Raphson (Sistemas No Lineales)</h4>
+            </div>
+            <div class="card-body">
+
+                <!-- Observaciones de Convergencia -->
+                <div class="mb-4">
+                    <div th:each="obs : ${resultado.observaciones}" class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <span th:text="${obs}">Observación</span>
+                    </div>
+                </div>
+
+                <!-- Derivadas Parciales Calculadas -->
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-secondary mb-3"><i class="bi bi-code-slash me-2"></i>Matriz Jacobiana Simbólica Calculada</h6>
+                        <div class="row text-center font-monospace">
+                            <div class="col-md-3"><strong>∂f1/∂x:</strong> <span class="text-primary" th:text="${resultado.df1dxStr}"></span></div>
+                            <div class="col-md-3"><strong>∂f1/∂y:</strong> <span class="text-primary" th:text="${resultado.df1dyStr}"></span></div>
+                            <div class="col-md-3"><strong>∂f2/∂x:</strong> <span class="text-primary" th:text="${resultado.df2dxStr}"></span></div>
+                            <div class="col-md-3"><strong>∂f2/∂y:</strong> <span class="text-primary" th:text="${resultado.df2dyStr}"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solución Final Vector X -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light border border-success rounded text-center shadow-sm">
+                            <span class="text-muted d-block small fw-bold">SOLUCIÓN X</span>
+                            <span class="fs-3 fw-bold text-success" 
+                                  th:text="${#numbers.formatDecimal(resultado.solucionX, 1, 'POINT', 6, 'POINT')}">0.000000</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light border border-success rounded text-center shadow-sm">
+                            <span class="text-muted d-block small fw-bold">SOLUCIÓN Y</span>
+                            <span class="fs-3 fw-bold text-success" 
+                                  th:text="${#numbers.formatDecimal(resultado.solucionY, 1, 'POINT', 6, 'POINT')}">0.000000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Iteraciones -->
+                <h5 class="fw-bold mb-3"><i class="bi bi-table me-2"></i>Historial de Iteraciones y Jacobianos</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered align-middle text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>k</th>
+                                <th>x</th>
+                                <th>y</th>
+                                <th>f1(x,y)</th>
+                                <th>f2(x,y)</th>
+                                <th>Det(J)</th>
+                                <th>ER x (%)</th>
+                                <th>ER y (%)</th>
+                                <th>ER Máx (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="fila : ${resultado.iteraciones}">
+                                <td class="fw-bold" th:text="${fila.iteracion}">1</td>
+                                <td th:text="${#numbers.formatDecimal(fila.x, 1, 'POINT', 6, 'POINT')}">0.000000</td>
+                                <td th:text="${#numbers.formatDecimal(fila.y, 1, 'POINT', 6, 'POINT')}">0.000000</td>
+                                <td th:text="${#numbers.formatDecimal(fila.f1Evaluado, 1, 'POINT', 6, 'POINT')}">0.000000</td>
+                                <td th:text="${#numbers.formatDecimal(fila.f2Evaluado, 1, 'POINT', 6, 'POINT')}">0.000000</td>
+                                <td th:text="${#numbers.formatDecimal(fila.jacobiano, 1, 'POINT', 6, 'POINT')}">0.000000</td>
+                                <td th:text="${#numbers.formatDecimal(fila.errorX, 1, 'POINT', 6, 'POINT')} + '%'">0.000000%</td>
+                                <td th:text="${#numbers.formatDecimal(fila.errorY, 1, 'POINT', 6, 'POINT')} + '%'">0.000000%</td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${fila.errorMaximo < 1.0} ? 'bg-success' : 'bg-warning text-dark'"
+                                          th:text="${#numbers.formatDecimal(fila.errorMaximo, 1, 'POINT', 6, 'POINT')} + '%'">0.000000%</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-start mt-4">
+                    <a th:href="@{/sistemas-no-lineales/newton-raphson}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left me-1"></i>Regresar a Formulario
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

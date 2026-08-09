@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Newton-Raphson - Sistemas No Lineales</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-cpu-fill me-2"></i>Newton-Raphson (Sistemas No Lineales 2x2)</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Error de procesamiento</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/sistemas-no-lineales/newton-raphson}" th:object="${newtonRaphsonRequest}" method="post">
+                    
+                    <!-- Funciones Igualadas a Cero -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-function me-2"></i>Sistema de Ecuaciones f1(x,y) = 0 y f2(x,y) = 0</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="f1" class="form-label fw-bold">Ecuación f1(x, y) = 0</label>
+                            <input type="text" class="form-control" id="f1" th:field="*{f1}" 
+                                   required placeholder="Ej. x^2 + x*y - 10" />
+                            <div class="form-text">Escribe la función $f_1(x, y)$ igualada a 0.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="f2" class="form-label fw-bold">Ecuación f2(x, y) = 0</label>
+                            <input type="text" class="form-control" id="f2" th:field="*{f2}" 
+                                   required placeholder="Ej. y + 3*x*y^2 - 57" />
+                            <div class="form-text">Escribe la función $f_2(x, y)$ igualada a 0.</div>
+                        </div>
+                    </div>
+
+                    <!-- Valores Iniciales -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-geo-alt me-2"></i>Aproximaciones Iniciales</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="x0" class="form-label fw-bold">Valor Inicial X0</label>
+                            <input type="number" step="any" class="form-control" id="x0" th:field="*{x0}" required placeholder="1.0" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="y0" class="form-label fw-bold">Valor Inicial Y0</label>
+                            <input type="number" step="any" class="form-control" id="y0" th:field="*{y0}" required placeholder="1.0" />
+                        </div>
+                    </div>
+
+                    <!-- Criterios de Convergencia -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-sliders me-2"></i>Criterios de Convergencia</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="tolerancia" class="form-label fw-bold">Tolerancia Error Relativo (%)</label>
+                            <input type="number" step="any" class="form-control" id="tolerancia" th:field="*{tolerancia}" required placeholder="Ej. 0.0001" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="maximoIteraciones" class="form-label fw-bold">Máximo de Iteraciones</label>
+                            <input type="number" class="form-control" id="maximoIteraciones" th:field="*{maximoIteraciones}" required placeholder="Ej. 100" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/sistemas-no-lineales}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-1"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-play-circle me-1"></i>Resolver
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

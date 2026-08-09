@@ -12,7 +12,7 @@ public class HomeController {
     @GetMapping("/")
     public String index(Model model) {
         log.info("Accediendo a la página de inicio del sistema de Métodos Numéricos");
-        model.addAttribute("welcomeMessage", "Bienvenido al Sistema de Métodos Numéricos");
+        model.addAttribute("welcomeMessage", "Bienvenido al Sistema de Métodos Numéricos - Inicio");
         return "home/index";
     }
 }

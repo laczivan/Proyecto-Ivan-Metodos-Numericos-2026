@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Método Iterativo de Jacobi</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="bi bi-cpu me-2"></i>Método Iterativo de Jacobi</h4>
+                <div class="btn-group" role="group" aria-label="Dimensiones">
+                    <a th:href="@{/sistemas-lineales/jacobi(dim=2)}" 
+                       th:classappend="${jacobiRequest.dimension == 2} ? 'btn-light text-primary fw-bold' : 'btn-outline-light'" 
+                       class="btn btn-sm">2x2</a>
+                    <a th:href="@{/sistemas-lineales/jacobi(dim=3)}" 
+                       th:classappend="${jacobiRequest.dimension == 3} ? 'btn-light text-primary fw-bold' : 'btn-outline-light'" 
+                       class="btn btn-sm">3x3</a>
+                    <a th:href="@{/sistemas-lineales/jacobi(dim=4)}" 
+                       th:classappend="${jacobiRequest.dimension == 4} ? 'btn-light text-primary fw-bold' : 'btn-outline-light'" 
+                       class="btn btn-sm">4x4</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Error de procesamiento</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/sistemas-lineales/jacobi}" th:object="${jacobiRequest}" method="post">
+                    <input type="hidden" th:field="*{dimension}" />
+
+                    <!-- Matriz A y Vector B -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-grid-3x3-gap me-2"></i>Matriz Coeficientes [A] y Términos Independientes [B]</h5>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th th:each="j : ${#numbers.sequence(1, jacobiRequest.dimension)}" th:text="'x' + ${j}">x1</th>
+                                    <th class="bg-warning-subtle text-dark">b</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="i : ${#numbers.sequence(0, jacobiRequest.dimension - 1)}">
+                                    <td th:each="j : ${#numbers.sequence(0, jacobiRequest.dimension - 1)}">
+                                        <input type="number" step="any" class="form-control text-center"
+                                               th:field="*{matrizA[__${i}__][__${j}__]}" required placeholder="0.0" />
+                                    </td>
+                                    <td class="bg-warning-subtle">
+                                        <input type="number" step="any" class="form-control text-center border-warning"
+                                               th:field="*{vectorB[__${i}__]}" required placeholder="0.0" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Vector Inicial X0 -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-arrow-right-circle me-2"></i>Vector Inicial [X0]</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col" th:each="i : ${#numbers.sequence(0, jacobiRequest.dimension - 1)}">
+                            <label th:for="${'vectorX0' + i}" class="form-label fw-bold" th:text="'x' + ${i+1} + ' (Inicial)'">x1 (Inicial)</label>
+                            <input type="number" step="any" class="form-control text-center"
+                                   th:field="*{vectorX0[__${i}__]}" required placeholder="0.0" />
+                        </div>
+                    </div>
+
+                    <!-- Tolerancia y Máximo de Iteraciones -->
+                    <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-sliders me-2"></i>Criterios de Convergencia</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="tolerancia" class="form-label fw-bold">Tolerancia Error Relativo (%)</label>
+                            <input type="number" step="any" class="form-control" id="tolerancia" 
+                                   th:field="*{tolerancia}" required placeholder="Ej. 0.0001" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="maximoIteraciones" class="form-label fw-bold">Máximo de Iteraciones</label>
+                            <input type="number" class="form-control" id="maximoIteraciones" 
+                                   th:field="*{maximoIteraciones}" required placeholder="Ej. 100" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/sistemas-lineales}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-1"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-play-circle me-1"></i>Resolver
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
