@@ -1,37 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body>
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold" th:href="@{/}">
-                <i class="bi bi-cpu-fill me-2 text-primary"></i>Métodos Numéricos
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/raices}">Raíces de Ecuaciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/sistemas-lineales}">Sistemas Lineales</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/ajuste-curvas}">Ajuste de Curvas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/derivacion}">Derivación</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/integracion}">Integración</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/ecuaciones-diferenciales}">Ecuaciones Diferenciales</a>
-                    </li>
-                </ul>
-            </div>
+  <body>
+    <nav
+      th:fragment="navbar"
+      class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm"
+    >
+      <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold" th:href="@{/}">
+          <i class="bi bi-cpu-fill me-2 text-primary"></i>Métodos Numéricos
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/raices}">Raíces de Ecuaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/sistemas-lineales}"
+                >Sistemas Lineales</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/ajuste-curvas}">
+                <i class="bi bi-graph-up me-1"></i> Ajuste de Curvas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/derivacion}">Derivación</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/integracion}">Integración</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/ecuaciones-diferenciales}"
+                >Ecuaciones Diferenciales</a
+              >
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
-</body>
+  </body>
 </html>

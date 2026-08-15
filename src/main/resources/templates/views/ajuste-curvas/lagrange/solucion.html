@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Solución - Polinomio de Lagrange</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="bi bi-check-circle me-2"></i>Resultados - Interpolación de Lagrange</h4>
+                <span class="badge bg-info text-dark" th:text="'Grado ' + ${resultado.gradoPolinomio}">Grado N</span>
+            </div>
+            <div class="card-body">
+                
+                <!-- Polinomio Resultante -->
+                <div class="alert alert-success border-success text-center py-3 mb-4">
+                    <h5 class="mb-1 text-uppercase text-muted fs-6 fw-bold">Polinomio Interpolador P(x)</h5>
+                    <p class="display-7 fw-bold text-dark mb-0" th:text="${resultado.polinomioResultante}">P(x) = ...</p>
+                </div>
+
+                <!-- Evaluación del Punto Objetivo -->
+                <div th:if="${resultado.xEvaluar != null}" class="alert alert-info border-info text-center py-3 mb-4">
+                    <h5 class="mb-1 text-uppercase text-muted fs-6 fw-bold">Resultado de Evaluación</h5>
+                    <p class="fs-4 mb-0">
+                        P(<span class="fw-bold" th:text="${resultado.xEvaluar}"></span>) = 
+                        <span class="fw-bold text-primary" th:text="${#numbers.formatDecimal(resultado.yEvaluado, 1, 'POINT', 6, 'POINT')}"></span>
+                    </p>
+                </div>
+
+                <!-- Funciones Base L_i(x) -->
+                <h5 class="fw-bold mt-4"><i class="bi bi-layers me-2"></i>Polinomios Base de Lagrange L<sub>i</sub>(x)</h5>
+                <ul class="list-group mb-4">
+                    <li th:each="li : ${resultado.polinomiosBaseL}" class="list-group-item font-monospace" th:text="${li}">L_i(x)</li>
+                </ul>
+
+                <!-- Pasos del Desarrollo -->
+                <h5 class="fw-bold mt-4"><i class="bi bi-list-ol me-2"></i>Desarrollo Matemático Paso a Paso</h5>
+                <div class="bg-light p-3 rounded border font-monospace text-dark mb-4">
+                    <div th:each="paso : ${resultado.pasosDesarrollo}" th:text="${paso}">Paso</div>
+                </div>
+
+                <div class="d-flex justify-content-start">
+                    <a th:href="@{/ajuste-curvas/lagrange}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i> Regresar al Formulario
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

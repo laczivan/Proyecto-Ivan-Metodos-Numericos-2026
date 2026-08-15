@@ -1,0 +1,138 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout/base :: layout(~{::title}, ~{::section})}"
+>
+  <head>
+    <title>Solución - Diferencias Divididas de Newton</title>
+  </head>
+  <body>
+    <section class="container-fluid my-4 px-4">
+      <div class="card shadow-sm border-0 mb-4">
+        <div
+          class="card-header bg-dark text-white d-flex justify-content-between align-items-center"
+        >
+          <h4 class="mb-0">
+            <i class="bi bi-calculator me-2"></i>Resultados - Diferencias
+            Divididas de Newton
+          </h4>
+          <span
+            class="badge bg-info fs-6"
+            th:text="'Polinomio de Orden ' + ${resultado.gradoPolinomio}"
+            >Orden</span
+          >
+        </div>
+        <div class="card-body">
+          <!-- Polinomio Resultante -->
+          <div class="alert alert-primary mb-4" role="alert">
+            <h5 class="alert-heading fw-bold">
+              <i class="bi bi-check-circle-fill me-2"></i>Polinomio de
+              Interpolación:
+            </h5>
+            <p
+              class="fs-5 mb-0 font-monospace"
+              th:text="${resultado.polinomioResultante}"
+            ></p>
+          </div>
+
+          <!-- Evaluación de Punto si fue provisto -->
+          <!-- Evaluación de Punto si fue provisto -->
+          <div
+            th:if="${resultado.resultadoEvaluacion != null}"
+            class="alert alert-success mb-4"
+            role="alert"
+          >
+            <h6 class="fw-bold mb-1">
+              <i class="bi bi-pin-angle-fill me-2"></i>Resultado de Evaluación:
+            </h6>
+            <span
+              class="fs-5"
+              th:text="'P(' + ${#numbers.formatDecimal(resultado.xEvaluar, 1, 'POINT', 4, 'POINT')} + ') = ' + ${#numbers.formatDecimal(resultado.resultadoEvaluacion, 1, 'POINT', 6, 'POINT')}"
+            ></span>
+          </div>
+
+          <!-- Tabla de Diferencias Divididas -->
+          <h5 class="fw-bold text-dark mt-4 mb-3">
+            Tabla Triangular de Diferencias Divididas
+          </h5>
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-striped align-middle text-center"
+            >
+              <thead class="table-dark">
+                <tr>
+                  <th>i</th>
+                  <th>Xi</th>
+                  <th>f(Xi) = b0</th>
+                  <th th:if="${resultado.gradoPolinomio >= 1}">1ª Dif (b1)</th>
+                  <th th:if="${resultado.gradoPolinomio >= 2}">2ª Dif (b2)</th>
+                  <th th:if="${resultado.gradoPolinomio >= 3}">3ª Dif (b3)</th>
+                  <th th:if="${resultado.gradoPolinomio == 4}">4ª Dif (b4)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  th:each="i : ${#numbers.sequence(0, resultado.numeroPuntos - 1)}"
+                >
+                  <td class="fw-bold" th:text="${i}">0</td>
+                  <td
+                    th:text="${#numbers.formatDecimal(resultado.valoresX[i], 1, 'POINT', 4, 'POINT')}"
+                  >
+                    0.0
+                  </td>
+                  <td
+                    th:text="${#numbers.formatDecimal(resultado.tablaDiferencias[i][0], 1, 'POINT', 4, 'POINT')}"
+                  >
+                    0.0
+                  </td>
+                  <td
+                    th:if="${resultado.gradoPolinomio >= 1}"
+                    th:text="${i < resultado.numeroPuntos - 1 ? #numbers.formatDecimal(resultado.tablaDiferencias[i][1], 1, 'POINT', 4, 'POINT') : '-'}"
+                  ></td>
+                  <td
+                    th:if="${resultado.gradoPolinomio >= 2}"
+                    th:text="${i < resultado.numeroPuntos - 2 ? #numbers.formatDecimal(resultado.tablaDiferencias[i][2], 1, 'POINT', 4, 'POINT') : '-'}"
+                  ></td>
+                  <td
+                    th:if="${resultado.gradoPolinomio >= 3}"
+                    th:text="${i < resultado.numeroPuntos - 3 ? #numbers.formatDecimal(resultado.tablaDiferencias[i][3], 1, 'POINT', 4, 'POINT') : '-'}"
+                  ></td>
+                  <td
+                    th:if="${resultado.gradoPolinomio == 4}"
+                    th:text="${i < resultado.numeroPuntos - 4 ? #numbers.formatDecimal(resultado.tablaDiferencias[i][4], 1, 'POINT', 4, 'POINT') : '-'}"
+                  ></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pasos de Desarrollo -->
+          <div class="card mt-4 border">
+            <div class="card-header bg-light fw-bold text-dark">
+              <i class="bi bi-list-nested me-2"></i>Pasos de Desarrollo
+              Detallados
+            </div>
+            <ul class="list-group list-group-flush font-monospace small">
+              <li
+                class="list-group-item"
+                th:each="paso : ${resultado.pasosDesarrollo}"
+                th:text="${paso}"
+              >
+                Paso
+              </li>
+            </ul>
+          </div>
+
+          <div class="d-flex justify-content-start mt-4">
+            <a
+              th:href="@{/ajuste-curvas/diferencias-divididas}"
+              class="btn btn-outline-primary"
+            >
+              <i class="bi bi-arrow-left"></i> Regresar al Formulario
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

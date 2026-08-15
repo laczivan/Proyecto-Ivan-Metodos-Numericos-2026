@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Interpolación de Lagrange</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-graph-up me-2"></i>Interpolación - Polinomio de Lagrange</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Error</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/ajuste-curvas/lagrange}" th:object="${lagrangeDTO}" method="post">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="numeroPuntos" class="form-label fw-bold">Número de Puntos (Grado Máx. 4):</label>
+                            <select id="numeroPuntos" class="form-select" th:field="*{numeroPuntos}" onchange="generarCamposTabla()" required>
+                                <option value="" disabled selected>-- Selecciona Puntos (2 a 5) --</option>
+                                <option value="2">2 Puntos (Grado 1)</option>
+                                <option value="3">3 Puntos (Grado 2)</option>
+                                <option value="4">4 Puntos (Grado 3)</option>
+                                <option value="5">5 Puntos (Grado 4)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="xEvaluar" class="form-label fw-bold">Valor X a Evaluar P(X) (Opcional):</label>
+                            <input type="number" step="any" class="form-control" id="xEvaluar" th:field="*{xEvaluar}" placeholder="Ej. 2.5" />
+                        </div>
+                    </div>
+
+                    <!-- Tabla Dinámica de Puntos -->
+                    <div id="contenedorTabla" class="table-responsive mb-4 d-none">
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Punto (i)</th>
+                                    <th>Valor X<sub>i</sub></th>
+                                    <th>Valor Y<sub>i</sub> = f(X<sub>i</sub>)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyPuntos">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a th:href="@{/}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-play-circle"></i> Calcular Polinomio
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function generarCamposTabla() {
+                const n = parseInt(document.getElementById('numeroPuntos').value);
+                const container = document.getElementById('contenedorTabla');
+                const tbody = document.getElementById('bodyPuntos');
+                tbody.innerHTML = '';
+
+                if (!n || n < 2 || n > 5) return;
+
+                for (let i = 0; i < n; i++) {
+                    const row = `
+                        <tr>
+                            <td class="fw-bold">${i}</td>
+                            <td><input type="number" step="any" class="form-control" name="valoresX[${i}]" required placeholder="x${i}"></td>
+                            <td><input type="number" step="any" class="form-control" name="valoresY[${i}]" required placeholder="y${i}"></td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                }
+                container.classList.remove('d-none');
+            }
+        </script>
+    </section>
+</body>
+</html>
