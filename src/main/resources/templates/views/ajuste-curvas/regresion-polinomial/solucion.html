@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Solución - Regresión Polinomial</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="bi bi-check-circle-fill me-2 text-success"></i>Resultados del Ajuste Polinomial</h4>
+                <span class="badge bg-info text-dark fs-6" th:text="'Polinomio de Grado ' + ${resultado.grado}">Grado N</span>
+            </div>
+            <div class="card-body">
+                <!-- Modelo Ajustado -->
+                <div class="alert alert-primary text-center py-3 mb-4 shadow-sm" role="alert">
+                    <h5 class="alert-heading text-uppercase fw-bold mb-1">Ecuación Resultante</h5>
+                    <p class="fs-3 font-monospace text-dark mb-0 fw-bold" th:text="${resultado.ecuacionResultante}">y = a0 + a1x + a2x^2</p>
+                </div>
+
+                <!-- Estadísticos -->
+                <div class="row row-cols-1 row-cols-md-3 g-3 mb-4 text-center">
+                    <div class="col">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="text-muted small">Coeficiente de Determinación (R²)</div>
+                            <div class="fs-4 fw-bold text-primary" th:text="${#numbers.formatDecimal(resultado.coeficienteDeterminacionR2, 1, 'POINT', 6, 'POINT')}">0.000000</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="text-muted small">Coeficiente de Correlación (R)</div>
+                            <div class="fs-4 fw-bold text-success" th:text="${#numbers.formatDecimal(resultado.coeficienteCorrelacionR, 1, 'POINT', 6, 'POINT')}">0.000000</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="text-muted small">Error Estándar de la Estimación (Sy/x)</div>
+                            <div class="fs-4 fw-bold text-danger" th:text="${#numbers.formatDecimal(resultado.errorEstandar, 1, 'POINT', 6, 'POINT')}">0.000000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coeficientes -->
+                <h5 class="fw-bold mb-3"><i class="bi bi-list-ol me-2"></i>Vector de Coeficientes Calculados</h5>
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered text-center align-middle">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th th:each="c, iter : ${resultado.coeficientes}" th:text="'a' + ${iter.index}">a0</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td th:each="c : ${resultado.coeficientes}" 
+                                    class="fw-bold font-monospace" 
+                                    th:text="${#numbers.formatDecimal(c, 1, 'POINT', 6, 'POINT')}">0.000000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Matriz del Sistema Aumentado -->
+                <h5 class="fw-bold mb-3"><i class="bi bi-grid-3x3 me-2"></i>Sistema de Ecuaciones Normales</h5>
+                <div class="table-responsive mb-4">
+                    <table class="table table-sm table-bordered text-center align-middle font-monospace">
+                        <tbody class="bg-light">
+                            <tr th:each="row : ${resultado.matrizSistema}">
+                                <td th:each="val : ${row}" 
+                                    th:text="${#numbers.formatDecimal(val, 1, 'POINT', 4, 'POINT')}">0.0000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pasos de Desarrollo -->
+                <div class="accordion mb-4" id="accordionPasos">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                <i class="bi bi-journal-text me-2"></i>Ver Pasos Detallados del Desarrollo
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionPasos">
+                            <div class="accordion-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item font-monospace" th:each="paso : ${resultado.pasosDesarrollo}" th:text="${paso}">Paso...</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-start">
+                    <a th:href="@{/ajuste-curvas/regresion-polinomial}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left me-1"></i> Regresar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

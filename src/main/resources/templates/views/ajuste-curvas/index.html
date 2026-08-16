@@ -55,7 +55,7 @@
                         <div class="card h-100 shadow-sm" style="border-color: #d29025;">
                             <div class="card-header text-white fw-bold" style="background-color: #c87d0d;">
                                 <i class="bi bi-diagram-2-fill me-2"></i>Regresión por Mínimos Cuadrados
-                            </div>
+                             </div>
                             <div class="list-group list-group-flush">
                                 <a th:href="@{/ajuste-curvas/regresion-lineal}" 
                                    class="list-group-item list-group-item-action flex-column align-items-start py-3">
@@ -66,7 +66,29 @@
                                     </div>
                                    
                                 </a>
+                                <a th:href="@{/ajuste-curvas/regresion-polinomial}" 
+                                   class="list-group-item list-group-item-action flex-column align-items-start py-3">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                        <h6 class="mb-1 fw-bold text-dark">
+                                            <i class="bi bi-graph-up me-2" style="color: #b7c10a;"></i> Regresión Polinomial
+                                        </h6>
+                                    </div>
+                                   
+                                </a>
+                                <a th:href="@{/ajuste-curvas/regresion-multiple}" 
+                                   class="list-group-item list-group-item-action flex-column align-items-start py-3">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                        <h6 class="mb-1 fw-bold text-dark">
+                                            <i class="bi bi-graph-up me-2" style="color: #e5ef31;"></i> Regresión lineal múltiple
+                                        </h6>
+                                    </div>
+                                   
+                                </a>
                             </div>
+
+                            
+                                
+                            
                         </div>
                     </div>
 

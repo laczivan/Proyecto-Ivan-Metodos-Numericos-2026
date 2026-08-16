@@ -5,9 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.cazl.metodosnumericos.dto.request.ajustecurvas.DiferenciasDivididasRequest;
 import mx.edu.itses.cazl.metodosnumericos.dto.request.ajustecurvas.LagrangeRequest;
 import mx.edu.itses.cazl.metodosnumericos.dto.request.ajustecurvas.RegresionLinealRequest;
+import mx.edu.itses.cazl.metodosnumericos.dto.request.ajustecurvas.RegresionMultipleRequest;
+import mx.edu.itses.cazl.metodosnumericos.dto.request.ajustecurvas.RegresionPolinomialRequest;
 import mx.edu.itses.cazl.metodosnumericos.dto.response.ajustecurvas.DiferenciasDivididasRespuesta;
 import mx.edu.itses.cazl.metodosnumericos.dto.response.ajustecurvas.LagrangeRespuesta;
 import mx.edu.itses.cazl.metodosnumericos.dto.response.ajustecurvas.RegresionLinealRespuesta;
+import mx.edu.itses.cazl.metodosnumericos.dto.response.ajustecurvas.RegresionMultipleRespuesta;
+import mx.edu.itses.cazl.metodosnumericos.dto.response.ajustecurvas.RegresionPolinomialRespuesta;
 import mx.edu.itses.cazl.metodosnumericos.service.AjusteCurvasService;
 
 import org.matheclipse.core.eval.ExprEvaluator;
@@ -305,5 +309,311 @@ public class AjusteCurvasServiceImpl implements AjusteCurvasService {
                 .ecuacionResultante(ecuacion)
                 .pasosDesarrollo(pasos)
                 .build();
+    }
+    @Override
+    public RegresionPolinomialRespuesta regresionPolinomial(RegresionPolinomialRequest request) {
+        log.info("Procesando Regresión Polinomial de Grado {} con {} puntos", request.getGrado(), request.getNumeroPuntos());
+        
+        int m = request.getGrado();
+        List<Double> x = request.getValoresX();
+        List<Double> y = request.getValoresY();
+
+        // 1. Validaciones Fail-Fast
+        if (m < 2 || m > 4) {
+            throw new IllegalArgumentException("El grado del polinomio debe estar comprendido entre 2 y 4.");
+        }
+        if (x == null || y == null || x.size() != y.size()) {
+            throw new IllegalArgumentException("Los vectores de coordenadas X y Y deben poseer el mismo número de elementos.");
+        }
+        int n = x.size();
+        if (n < (m + 1)) {
+            throw new IllegalArgumentException(String.format("Para un polinomio de grado %d se requieren al menos %d puntos de datos.", m, m + 1));
+        }
+
+        List<String> pasos = new ArrayList<>();
+        pasos.add(String.format(Locale.US, "Grado del polinomio seleccionado: m = %d. Cantidad de datos: N = %d.", m, n));
+
+        // 2. Cálculo de sumatorias de potencias de X y productos X^k * Y
+        double[] sumX = new double[2 * m + 1];
+        double[] sumXY = new double[m + 1];
+
+        for (int i = 0; i < n; i++) {
+            double xi = x.get(i);
+            double yi = y.get(i);
+
+            for (int k = 0; k <= 2 * m; k++) {
+                sumX[k] += Math.pow(xi, k);
+            }
+            for (int k = 0; k <= m; k++) {
+                sumXY[k] += (Math.pow(xi, k) * yi);
+            }
+        }
+
+        pasos.add("Sumatorias de potencias de X calculadas desde x^0 hasta x^" + (2 * m));
+        pasos.add("Sumatorias de productos X^k * Y calculadas desde x^0*y hasta x^" + m + "*y");
+
+        // 3. Construcción del sistema de ecuaciones normales de dimensión (m+1) x (m+2)
+        int numEq = m + 1;
+        double[][] matrizAumentada = new double[numEq][numEq + 1];
+
+        for (int i = 0; i < numEq; i++) {
+            for (int j = 0; j < numEq; j++) {
+                matrizAumentada[i][j] = sumX[i + j];
+            }
+            matrizAumentada[i][numEq] = sumXY[i];
+        }
+
+        // Copia para preservar el estado original de la matriz aumentada en el DTO
+        double[][] matrizSistemaCopia = new double[numEq][numEq + 1];
+        for (int i = 0; i < numEq; i++) {
+            System.arraycopy(matrizAumentada[i], 0, matrizSistemaCopia[i], 0, numEq + 1);
+        }
+
+        pasos.add("Sistema de Ecuaciones Normales construido de dimensión (" + numEq + "x" + (numEq + 1) + ").");
+
+        // 4. Resolución del sistema por Eliminación Gaussiana con Pivoteo Parcial
+        double[] coeficientes = resolverSistemaGauss(matrizAumentada, numEq, pasos);
+
+        // 5. Cálculo de Estadísticos de Calidad de Ajuste (St, Sr, R2, R y Sy/x)
+        double sumY = sumXY[0];
+        double promedioY = sumY / n;
+        double st = 0.0;
+        double sr = 0.0;
+
+        for (int i = 0; i < n; i++) {
+            double xi = x.get(i);
+            double yi = y.get(i);
+
+            // Evaluación del polinomio P(xi) = a0 + a1*x + a2*x^2 + ... + am*x^m
+            double yPredicho = 0.0;
+            for (int k = 0; k <= m; k++) {
+                yPredicho += coeficientes[k] * Math.pow(xi, k);
+            }
+
+            st += Math.pow(yi - promedioY, 2);
+            sr += Math.pow(yi - yPredicho, 2);
+        }
+
+        double r2 = (st != 0) ? (st - sr) / st : 0.0;
+        double r = Math.sqrt(Math.max(0.0, r2));
+        double syx = (n > numEq) ? Math.sqrt(sr / (n - numEq)) : 0.0;
+
+        pasos.add(String.format(Locale.US, "Suma total de cuadrados (St): %.6f", st));
+        pasos.add(String.format(Locale.US, "Suma de residuos al cuadrado (Sr): %.6f", sr));
+        pasos.add(String.format(Locale.US, "Coeficiente de Determinación (R²): %.6f", r2));
+        pasos.add(String.format(Locale.US, "Coeficiente de Correlación (R): %.6f", r));
+        pasos.add(String.format(Locale.US, "Error estándar de la estimación (Sy/x): %.6f", syx));
+
+        // 6. Construcción de la cadena que representa la ecuación polinomial ajustada
+        StringBuilder sbEcuacion = new StringBuilder("y = ");
+        for (int i = 0; i <= m; i++) {
+            double coef = coeficientes[i];
+            if (i == 0) {
+                sbEcuacion.append(String.format(Locale.US, "%.6f", coef));
+            } else {
+                sbEcuacion.append(coef >= 0 ? " + " : " - ");
+                sbEcuacion.append(String.format(Locale.US, "%.6f", Math.abs(coef)));
+                sbEcuacion.append("x");
+                if (i > 1) {
+                    sbEcuacion.append("^").append(i);
+                }
+            }
+        }
+
+        return RegresionPolinomialRespuesta.builder()
+                .grado(m)
+                .coeficientes(coeficientes)
+                .sumatoriasX(sumX)
+                .sumatoriasXY(sumXY)
+                .matrizSistema(matrizSistemaCopia)
+                .coeficienteDeterminacionR2(r2)
+                .coeficienteCorrelacionR(r)
+                .errorEstandar(syx)
+                .ecuacionResultante(sbEcuacion.toString())
+                .pasosDesarrollo(pasos)
+                .build();
+    }
+
+    private double[] resolverSistemaGauss(double[][] a, int n, List<String> pasos) {
+        pasos.add("Iniciando eliminación Gaussiana con pivoteo parcial...");
+        for (int i = 0; i < n; i++) {
+            int maxFila = i;
+            for (int k = i + 1; k < n; k++) {
+                if (Math.abs(a[k][i]) > Math.abs(a[maxFila][i])) {
+                    maxFila = k;
+                }
+            }
+            if (maxFila != i) {
+                double[] temp = a[i];
+                a[i] = a[maxFila];
+                a[maxFila] = temp;
+                pasos.add(String.format(Locale.US, "Intercambio de Fila %d con Fila %d", i + 1, maxFila + 1));
+            }
+
+            if (Math.abs(a[i][i]) < 1e-12) {
+                throw new ArithmeticException("El sistema de ecuaciones es singular o indeterminado; pivote nulo detectado.");
+            }
+
+            for (int j = i + 1; j < n; j++) {
+                double factor = a[j][i] / a[i][i];
+                for (int k = i; k <= n; k++) {
+                    a[j][k] -= factor * a[i][k];
+                }
+            }
+        }
+
+        // Sustitución hacia atrás
+        double[] x = new double[n];
+        for (int i = n - 1; i >= 0; i--) {
+            double suma = 0.0;
+            for (int j = i + 1; j < n; j++) {
+                suma += a[i][j] * x[j];
+            }
+            x[i] = (a[i][n] - suma) / a[i][i];
+        }
+        pasos.add("Sustitución hacia atrás completada. Coeficientes obtenidos.");
+        return x;
+    }
+    @Override
+    public RegresionMultipleRespuesta regresionMultiple(RegresionMultipleRequest request) {
+        log.info("Ejecutando algoritmo de Regresión Lineal Múltiple para N={}", request.getNumeroPuntos());
+        
+        int n = request.getNumeroPuntos();
+        double[] x1 = request.getValoresX1();
+        double[] x2 = request.getValoresX2();
+        double[] y = request.getValoresY();
+
+        // 21.6 Validación Fail-Fast
+        if (n < 4) {
+            throw new IllegalArgumentException("La regresión lineal múltiple requiere un número mínimo de 4 puntos (N >= 4).");
+        }
+        if (x1 == null || x2 == null || y == null || x1.length != n || x2.length != n || y.length != n) {
+            throw new IllegalArgumentException("Los vectores de entrada X1, X2 y Y deben ser no nulos y tener la misma dimensión.");
+        }
+
+        List<String> pasos = new ArrayList<>();
+        
+        // 1. Cálculo de sumatorias
+        double sumX1 = 0.0, sumX2 = 0.0, sumY = 0.0;
+        double sumX1Sq = 0.0, sumX2Sq = 0.0, sumX1X2 = 0.0;
+        double sumX1Y = 0.0, sumX2Y = 0.0;
+
+        for (int i = 0; i < n; i++) {
+            sumX1 += x1[i];
+            sumX2 += x2[i];
+            sumY += y[i];
+            sumX1Sq += x1[i] * x1[i];
+            sumX2Sq += x2[i] * x2[i];
+            sumX1X2 += x1[i] * x2[i];
+            sumX1Y += x1[i] * y[i];
+            sumX2Y += x2[i] * y[i];
+        }
+
+        pasos.add("Paso 1: Cálculo acumulativo de sumatorias:");
+        pasos.add(String.format(Locale.US, "ΣX1 = %.4f | ΣX2 = %.4f | ΣY = %.4f", sumX1, sumX2, sumY));
+        pasos.add(String.format(Locale.US, "ΣX1² = %.4f | ΣX2² = %.4f | ΣX1X2 = %.4f", sumX1Sq, sumX2Sq, sumX1X2));
+        pasos.add(String.format(Locale.US, "ΣX1Y = %.4f | ΣX2Y = %.4f", sumX1Y, sumX2Y));
+
+        // 2. Planteamiento y solución del Sistema 3x3 por Gauss-Jordan
+        double[][] sistemaAumentado = {
+            {n, sumX1, sumX2, sumY},
+            {sumX1, sumX1Sq, sumX1X2, sumX1Y},
+            {sumX2, sumX1X2, sumX2Sq, sumX2Y}
+        };
+
+        double[] coeficientes = resolverGaussJordan3x3(sistemaAumentado, pasos);
+        double a0 = coeficientes[0];
+        double a1 = coeficientes[1];
+        double a2 = coeficientes[2];
+
+        // 3. Evaluación de estadísticos (St, Sr, Sy/x1x2, R2, R)
+        double promedioY = sumY / n;
+        double st = 0.0;
+        double sr = 0.0;
+
+        for (int i = 0; i < n; i++) {
+            double yEstimado = a0 + (a1 * x1[i]) + (a2 * x2[i]);
+            st += Math.pow(y[i] - promedioY, 2);
+            sr += Math.pow(y[i] - yEstimado, 2);
+        }
+
+        double errorEstandar = (n > 3) ? Math.sqrt(sr / (n - 3)) : 0.0;
+        double r2 = (st > 0) ? (st - sr) / st : 0.0;
+        if (r2 < 0) r2 = 0.0; // Control de desbordamiento numérico
+        double r = Math.sqrt(r2);
+
+        pasos.add("Paso 3: Evaluación de errores y coeficientes de correlación:");
+        pasos.add(String.format(Locale.US, "Suma Total de Cuadrados (St) = %.6f", st));
+        pasos.add(String.format(Locale.US, "Suma de Residuos al Cuadrado (Sr) = %.6f", sr));
+        pasos.add(String.format(Locale.US, "Error estándar de la estimación Sy/x1x2 = %.6f", errorEstandar));
+        pasos.add(String.format(Locale.US, "Coeficiente de Determinación R² = %.6f (%.2f%%)", r2, r2 * 100));
+        pasos.add(String.format(Locale.US, "Coeficiente de Correlación R = %.6f", r));
+
+        // Construcción de la ecuación formal
+        String ecuacion = String.format(Locale.US, "y = %.4f %s %.4fx1 %s %.4fx2",
+                a0,
+                (a1 >= 0 ? "+" : "-"), Math.abs(a1),
+                (a2 >= 0 ? "+" : "-"), Math.abs(a2));
+
+        return RegresionMultipleRespuesta.builder()
+                .numeroPuntos(n)
+                .a0(a0)
+                .a1(a1)
+                .a2(a2)
+                .sumatoriaX1(sumX1)
+                .sumatoriaX2(sumX2)
+                .sumatoriaY(sumY)
+                .sumatoriaX1Cuadrado(sumX1Sq)
+                .sumatoriaX2Cuadrado(sumX2Sq)
+                .sumatoriaX1X2(sumX1X2)
+                .sumatoriaX1Y(sumX1Y)
+                .sumatoriaX2Y(sumX2Y)
+                .coeficienteDeterminacionR2(r2)
+                .coeficienteCorrelacionR(r)
+                .error(errorEstandar)
+                .ecuacionResultante(ecuacion)
+                .pasosDesarrollo(pasos)
+                .build();
+    }
+
+    private double[] resolverGaussJordan3x3(double[][] m, List<String> pasos) {
+        int n = 3;
+        pasos.add("Paso 2: Planteamiento de la Matriz Aumentada (3x4):");
+        
+        for (int i = 0; i < n; i++) {
+            int max = i;
+            for (int k = i + 1; k < n; k++) {
+                if (Math.abs(m[k][i]) > Math.abs(m[max][i])) max = k;
+            }
+            if (max != i) {
+                double[] temp = m[i];
+                m[i] = m[max];
+                m[max] = temp;
+                pasos.add(String.format(Locale.US, "Pivoteo: Intercambio Fila %d <-> Fila %d", i + 1, max + 1));
+            }
+
+            double pivote = m[i][i];
+            if (Math.abs(pivote) < 1e-12) {
+                throw new ArithmeticException("Sistema colineal o singular: Pivote nulo detectado en el método de Gauss-Jordan.");
+            }
+
+            for (int j = i; j <= n; j++) {
+                m[i][j] /= pivote;
+            }
+
+            for (int k = 0; k < n; k++) {
+                if (k != i) {
+                    double factor = m[k][i];
+                    for (int j = i; j <= n; j++) {
+                        m[k][j] -= factor * m[i][j];
+                    }
+                }
+            }
+        }
+
+        pasos.add(String.format(Locale.US, "Coeficientes calculados: a0 = %.6f, a1 = %.6f, a2 = %.6f",
+                m[0][3], m[1][3], m[2][3]));
+
+        return new double[]{m[0][3], m[1][3], m[2][3]};
     }
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Regresión Lineal Múltiple</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Regresión Lineal Múltiple (2 Variables)</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Error</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Selector del número de puntos -->
+                <form th:action="@{/ajuste-curvas/regresion-multiple}" method="get" class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label for="puntos" class="form-label fw-bold">Número de Puntos (N &ge; 4):</label>
+                        <input type="number" id="puntos" name="puntos" class="form-control" 
+                               th:value="${regresionMultipleDTO.numeroPuntos}" min="4" required />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-arrow-repeat"></i> Redimensionar
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Formulario de entrada de datos -->
+                <form th:action="@{/ajuste-curvas/regresion-multiple}" th:object="${regresionMultipleDTO}" method="post">
+                    <input type="hidden" th:field="*{numeroPuntos}" />
+
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered align-middle text-center">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Variable X1<sub>i</sub></th>
+                                    <th>Variable X2<sub>i</sub></th>
+                                    <th>Variable Dependiente Y<sub>i</sub></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="i : ${#numbers.sequence(0, regresionMultipleDTO.numeroPuntos - 1)}">
+                                    <td class="fw-bold" th:text="${i + 1}">1</td>
+                                    <td>
+                                        <input type="number" step="any" class="form-control text-center" 
+                                               th:field="*{valoresX1[__${i}__]}" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="any" class="form-control text-center" 
+                                               th:field="*{valoresX2[__${i}__]}" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="any" class="form-control text-center" 
+                                               th:field="*{valoresY[__${i}__]}" required />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/ajuste-curvas}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-calculator"></i> Resolver
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
