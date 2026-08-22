@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head><title>Solución - Integración Múltiple</title></head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-success text-white"><h4 class="mb-0">Resultados - Integral Doble</h4></div>
+            <div class="card-body text-center row">
+                <div class="col-md-4"><h5>Integral Exacta</h5><p class="fs-4 text-primary" th:text="${respuesta.integralExacta}"></p></div>
+                <div class="col-md-4"><h5>Integral Aproximada</h5><p class="fs-4 text-success fw-bold" th:text="${respuesta.integralAproximada}"></p></div>
+                <div class="col-md-4"><h5>Error Relativo (%)</h5><p class="fs-4 text-danger" th:text="${#numbers.formatDecimal(respuesta.errorRelativo, 1, 4)} + '%'"></p></div>
+            </div>
+        </div>
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">Desarrollo del Método</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="paso : ${respuesta.pasosDesarrollo}" th:text="${paso}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-end"><a th:href="@{/integracion/multiple}" class="btn btn-primary">Regresar</a></div>
+    </section>
+</body>
+</html>

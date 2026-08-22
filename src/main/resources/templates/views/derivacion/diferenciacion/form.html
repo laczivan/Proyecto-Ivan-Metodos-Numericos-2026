@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Diferenciación Numérica</title>
+</head>
+<body>
+<section class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-calculator"></i> Diferenciación Numérica (Hasta 4.º Orden)</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Mensaje de error si ocurre -->
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}">Error al procesar la solicitud</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form th:action="@{/derivacion/diferenciacion}" th:object="${derivacionRequest}" method="post">
+                        <!-- Función f(x) -->
+                        <div class="mb-3">
+                            <label for="funcion" class="form-label font-weight-bold">Función F(x)</label>
+                            <input type="text" class="form-control" id="funcion" th:field="*{funcion}" 
+                                   placeholder="Ej: x^3 + 2*x^2 - x + 5" required />
+                            <small class="form-text text-muted">Soporta operadores básicos, funciones trigonométricas (Sin, Cos) y potencias (^).</small>
+                        </div>
+
+                        <div class="row">
+                            <!-- Punto x0 -->
+                            <div class="col-md-6 mb-3">
+                                <label for="x" class="form-label font-weight-bold">Valor del punto (X₀)</label>
+                                <input type="number" step="any" class="form-control" id="x" th:field="*{x}" required />
+                            </div>
+
+                            <!-- Incremento h -->
+                            <div class="col-md-6 mb-3">
+                                <label for="h" class="form-label font-weight-bold">Tamaño de paso (h)</label>
+                                <input type="number" step="any" class="form-control" id="h" th:field="*{h}" required />
+                            </div>
+                        </div>
+
+                        <!-- Orden de la derivada -->
+                        <div class="mb-4">
+                            <label class="form-label font-weight-bold">Orden de la Derivada</label>
+                            <select class="form-select" th:field="*{ordenDerivada}" required>
+                                <option value="1">1.er Orden: Primera Derivada f'(x)</option>
+                                <option value="2">2.º Orden: Segunda Derivada f''(x)</option>
+                                <option value="3">3.er Orden: Tercera Derivada f'''(x)</option>
+                                <option value="4">4.º Orden: Cuarta Derivada f⁴(x)</option>
+                            </select>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/derivacion}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg"></i> Resolver
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

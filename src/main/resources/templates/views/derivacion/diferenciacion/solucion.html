@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Resultados de Diferenciación Numérica</title>
+</head>
+<body>
+<section class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <!-- Tarjeta de Resumen -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="bi bi-file-earmark-check"></i> Resultados de Diferenciación Numérica</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Función Evaluada:</strong> <span th:text="${respuesta.funcion}">f(x)</span></p>
+                            <p><strong>Punto X₀:</strong> <span th:text="${respuesta.x}">0.0</span></p>
+                            <p><strong>Paso (h):</strong> <span th:text="${respuesta.h}">0.1</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Orden de Derivada:</strong> <span th:text="${respuesta.ordenDerivada}">1</span></p>
+                            <p><strong>Derivada Analítica fⁿ(x):</strong> <code th:text="${respuesta.derivadaAnalitica}">f'(x)</code></p>
+                            <p><strong>Valor Exacto en X₀:</strong> <span class="badge bg-primary text-wrap" th:text="${#numbers.formatDecimal(respuesta.valorExacto, 1, 6)}">0.000000</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Resultados Comparativos -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Tabla Comparativa de Esquemas</h5>
+                </div>
+                <div class="card-body p-0 table-responsive">
+                    <table class="table table-striped table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Esquema</th>
+                                <th>Fórmula Aplicada</th>
+                                <th class="text-end">Valor Aproximado</th>
+                                <th class="text-end">Error Relativo (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${respuesta.resultados}">
+                                <td class="fw-bold" th:text="${item.esquema}">Esquema</td>
+                                <td><code th:text="${item.formulaUsada}">fórmula</code></td>
+                                <td class="text-end font-monospace" th:text="${#numbers.formatDecimal(item.valorAproximado, 1, 6)}">0.000000</td>
+                                <td class="text-end font-monospace text-danger" th:text="${#numbers.formatDecimal(item.errorRelativo, 1, 4)} + '%'">0.00%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pasos de Desarrollo -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-list-ol"></i> Desarrollo Paso a Paso</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush font-monospace small">
+                        <li class="list-group-item" th:each="paso : ${respuesta.pasosDesarrollo}" th:text="${paso}">Paso...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Botón de Regreso -->
+            <div class="d-flex justify-content-start mb-4">
+                <a th:href="@{/derivacion/diferenciacion}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Realizar otro cálculo
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

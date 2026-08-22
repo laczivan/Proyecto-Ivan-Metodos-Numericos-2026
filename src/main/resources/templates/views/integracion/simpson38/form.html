@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Método de Simpson 3/8</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Captura de Datos - Simpson 3/8 (Simple)</h4>
+            </div>
+            <div class="card-body">
+                
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                <form th:action="@{/integracion/simpson38}" th:object="${simpson38Request}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Función f(x)</label>
+                        <input type="text" class="form-control" th:field="*{fx}" placeholder="Ej. exp(x) * sin(x)" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Límite Inferior (a)</label>
+                            <input type="number" step="any" class="form-control" th:field="*{a}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Límite Superior (b)</label>
+                            <input type="number" step="any" class="form-control" th:field="*{b}" required>
+                        </div>
+                    </div>
+                    <div class="alert alert-info py-2">
+                        <i class="bi bi-info-circle me-2"></i> Para la aplicación simple de este método, el número de segmentos <strong>n = 3</strong> se define automáticamente.
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <a th:href="@{/integracion}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-success">Resolver</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

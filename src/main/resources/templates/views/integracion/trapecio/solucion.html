@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Resultado - Regla del Trapecio</title>
+</head>
+<body>
+<section class="container mt-4">
+    <h2>Resultados - Regla del Trapecio</h2>
+    <hr/>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <p><strong>Función:</strong> <span th:text="${resultado.fx}"></span></p>
+            <p><strong>Límites:</strong> a = <span th:text="${resultado.a}"></span>, b = <span th:text="${resultado.b}"></span></p>
+            <p><strong>Ancho de paso (h):</strong> <span th:text="${resultado.h}"></span></p>
+            <p><strong>Integral Aproximada:</strong> <span class="badge bg-success fs-6" th:text="${resultado.integralAproximada}"></span></p>
+            <p><strong>Integral Exacta:</strong> <span th:text="${resultado.integralExacta}"></span></p>
+            <p><strong>Error Relativo:</strong> <span th:text="${#numbers.formatDecimal(resultado.errorRelativo, 1, 4)}"></span>%</p>
+        </div>
+    </div>
+
+    <h4>Tabla de Puntos Evaluados</h4>
+    <table class="table table-striped table-bordered mt-2">
+        <thead class="table-dark">
+            <tr>
+                <th>i</th>
+                <th>xi</th>
+                <th>f(xi)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="punto : ${resultado.tablaPuntos}">
+                <td th:text="${punto.i}"></td>
+                <td th:text="${punto.xi}"></td>
+                <td th:text="${punto.fxi}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4 class="mt-4">Pasos del Desarrollo</h4>
+    <ul class="list-group mb-4">
+        <li class="list-group-item" th:each="paso : ${resultado.pasosDesarrollo}" th:text="${paso}"></li>
+    </ul>
+
+    <a th:href="@{/integracion/trapecio}" class="btn btn-primary">Regresar</a>
+</section>
+</body>
+</html>

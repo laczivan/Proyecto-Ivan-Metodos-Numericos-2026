@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Regla del Trapecio</title>
+</head>
+<body>
+<section class="container mt-4">
+    <h2>Integración Numérica - Regla del Trapecio</h2>
+    <hr/>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="@{/integracion/trapecio}" th:object="${trapecioRequest}" method="post" class="card p-4 shadow-sm">
+        <div class="mb-3">
+            <label for="fx" class="form-label">Función f(x):</label>
+            <input type="text" id="fx" th:field="*{fx}" class="form-control" placeholder="Ej: x^2, Sin(x)" required />
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="a" class="form-label">Límite Inferior (a):</label>
+                <input type="number" step="any" id="a" th:field="*{a}" class="form-control" required />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="b" class="form-label">Límite Superior (b):</label>
+                <input type="number" step="any" id="b" th:field="*{b}" class="form-control" required />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="n" class="form-label">Número de Segmentos (n):</label>
+                <input type="number" id="n" th:field="*{n}" class="form-control" min="1" required />
+            </div>
+        </div>
+        <div class="d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">Resolver</button>
+            <a th:href="@{/integracion}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</section>
+</body>
+</html>

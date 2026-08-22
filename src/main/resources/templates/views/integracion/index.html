@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Unidad VI.- Integración Numérica</title>
+</head>
+<body>
+    <section class="container my-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-calculator me-2"></i>Unidad VI.- Integración Numérica
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="lead text-muted">
+                    Cálculo aproximado de integrales definidas mediante métodos de cuadratura numérica (Regla del Trapecio simple y compuesta, Método de Simpson).
+                </p>
+                <hr />
+                <div class="row g-4 mt-2">
+
+                    <!-- Métodos de Integración -->
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm" style="border-color: #d87093;">
+                            <div class="card-header text-white fw-bold" style="background-color: #d87093;">
+                                <i class="bi bi-layers-half me-2"></i>Métodos de Integración
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <!-- Enlace a Regla del Trapecio -->
+                                <a th:href="@{/integracion/trapecio}" 
+                                   class="list-group-item list-group-item-action flex-column align-items-start py-3">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                        <h6 class="mb-1 fw-bold text-dark">
+                                            <i class="bi bi-cpu me-2" style="color: #bde655;"></i> Regla del Trapecio
+                                        </h6>
+                                    </div>
+                                </a>
+                                
+                                <!-- Enlace a Método de Simpson 1/3 -->
+                                <a th:href="@{/integracion/simpson13}" 
+                                   class="list-group-item list-group-item-action flex-column align-items-start py-3">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                        <h6 class="mb-1 fw-bold text-dark">
+                                            <i class="bi bi-cpu me-2" style="color: #d9dc74;"></i> Método de Simpson 1/3
+                                        </h6>
+                                    </div>
+                                </a>
+
+                                 <a th:href="@{/integracion/simpson38}" 
+                                   class="list-group-item list-group-item-action flex-column align-items-start py-3">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                        <h6 class="mb-1 fw-bold text-dark">
+                                            <i class="bi bi-cpu me-2" style="color: #b2ce13;"></i> Método de Simpson 3/8
+                                        </h6>
+                                    </div>
+                                </a>
+
+                                 <a th:href="@{/integracion/simpson38}" 
+                                   class="list-group-item list-group-item-action flex-column align-items-start py-3">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                        <h6 class="mb-1 fw-bold text-dark">
+                                            <i class="bi bi-cpu me-2" style="color: #e1e942;"></i> Integración múltiple para dos variables
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
