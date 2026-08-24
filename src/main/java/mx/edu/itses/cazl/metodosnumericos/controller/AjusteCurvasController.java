@@ -172,7 +172,7 @@ public class AjusteCurvasController {
 
         model.addAttribute("titulo", "Regresión Polinomial");
         // ¡AQUÍ ESTÁ EL CAMBIO! Le ponemos "request" exactamente como lo pide el HTML
-        model.addAttribute("request", peticion);
+        model.addAttribute("regresionPolinomialRequest", peticion);
         
         return "views/ajuste-curvas/regresion-polinomial/form";
     }

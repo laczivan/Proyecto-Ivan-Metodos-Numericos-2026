@@ -7,7 +7,7 @@
 <body>
     <section class="container my-4">
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0"><i class="bi bi-graph-up me-2"></i>Ajuste de Curvas - Regresión Polinomial</h4>
             </div>
             <div class="card-body">
@@ -17,42 +17,55 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
-                <form th:action="@{/ajuste-curvas/regresion-polinomial}" th:object="${request}" method="post">
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label for="grado" class="form-label fw-bold">Grado del Polinomio (2 a 4)</label>
-                            <select id="grado" th:field="*{grado}" class="form-select" required>
-                                <option value="2">Grado 2 (Cuadrático)</option>
-                                <option value="3">Grado 3 (Cúbico)</option>
-                                <option value="4">Grado 4 (Cuártico)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="numeroPuntos" class="form-label fw-bold">Cantidad de Puntos (N >= Grado + 1)</label>
-                            <input type="number" id="numeroPuntos" class="form-control" th:field="*{numeroPuntos}" min="3" max="20" required />
-                        </div>
+                <!-- Selector dinámico de dimensión y grado -->
+                <form th:action="@{/ajuste-curvas/regresion-polinomial}" method="get" class="row g-3 mb-4 align-items-end">
+                    <div class="col-md-4">
+                        <label for="puntos" class="form-label fw-bold">Número de puntos (N &ge; 3):</label>
+                        <!-- Usamos regresionPolinomialRequest (revisa que coincida con tu Controller) -->
+                        <input type="number" id="puntos" name="puntos" class="form-control" min="3" max="50" th:value="${regresionPolinomialRequest.numeroPuntos}" />
                     </div>
+                    <div class="col-md-4">
+                        <label for="grado" class="form-label fw-bold">Grado del Polinomio (m):</label>
+                        <select id="grado" name="grado" class="form-select">
+                            <option value="2" th:selected="${regresionPolinomialRequest.grado == 2}">2 (Cuadrática)</option>
+                            <option value="3" th:selected="${regresionPolinomialRequest.grado == 3}">3 (Cúbica)</option>
+                            <option value="4" th:selected="${regresionPolinomialRequest.grado == 4}">4</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-clockwise"></i> Actualizar Tabla
+                        </button>
+                    </div>
+                </form>
 
-                    <h5 class="fw-bold border-bottom pb-2">Tabla de Coordenadas (X, Y)</h5>
+                <hr />
+
+                <!-- Formulario principal de captura -->
+                <form th:action="@{/ajuste-curvas/regresion-polinomial}" th:object="${regresionPolinomialRequest}" method="post">
+                    <!-- Campos ocultos para mantener ambos valores -->
+                    <input type="hidden" th:field="*{numeroPuntos}" />
+                    <input type="hidden" th:field="*{grado}" />
+
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover text-center align-middle" id="tablaPuntos">
+                        <table class="table table-bordered text-center align-middle">
                             <thead class="table-dark">
                                 <tr>
-                                    <th style="width: 10%;">#</th>
-                                    <th>Coordenada X (Variable Independiente)</th>
-                                    <th>Coordenada Y (Variable Dependiente)</th>
+                                    <th style="width: 10%;">Punto (i)</th>
+                                    <th style="width: 45%;">Valor Variable X<sub>i</sub></th>
+                                    <th style="width: 45%;">Valor Variable Y<sub>i</sub></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="val, iterStat : *{valoresX}">
-                                    <td class="fw-bold" th:text="${iterStat.count}">1</td>
+                                <tr th:each="val, iter : *{valoresX}">
+                                    <td class="fw-bold" th:text="${iter.count}">1</td>
                                     <td>
                                         <input type="number" step="any" class="form-control text-center" 
-                                               th:field="*{valoresX[__${iterStat.index}__]}" required />
+                                               th:field="*{valoresX[__${iter.index}__]}" required />
                                     </td>
                                     <td>
                                         <input type="number" step="any" class="form-control text-center" 
-                                               th:field="*{valoresY[__${iterStat.index}__]}" required />
+                                               th:field="*{valoresY[__${iter.index}__]}" required />
                                     </td>
                                 </tr>
                             </tbody>
@@ -60,11 +73,11 @@
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 mt-4">
-                        <a th:href="@{/ajuste-curvas}" class="btn btn-secondary">
-                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                        <a th:href="@{/}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
                         </a>
                         <button type="submit" class="btn btn-success">
-                            <i class="bi bi-calculator me-1"></i> Resolver
+                            <i class="bi bi-play-circle"></i> Resolver
                         </button>
                     </div>
                 </form>
