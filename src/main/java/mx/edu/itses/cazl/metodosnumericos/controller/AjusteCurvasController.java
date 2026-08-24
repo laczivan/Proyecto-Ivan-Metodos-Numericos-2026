@@ -205,20 +205,28 @@ public class AjusteCurvasController {
     // FASE 21: REGRESIÓN LINEAL MÚLTIPLE
     // ==========================================
     @GetMapping("/regresion-multiple")
-    public String formRegresionMultiple(Model model) {
-        // Se declara la variable como entero y se inicializa
-        int puntos = 4; 
+    public String formRegresionMultiple(
+            @RequestParam(value = "puntos", defaultValue = "4") Integer puntos,
+            Model model) {
         
-        RegresionMultipleRequest dto = RegresionMultipleRequest.builder()
+        // 1. Validación mínima: La regresión múltiple requiere al menos 4 puntos
+        if (puntos < 4) {
+            puntos = 4;
+        }
+
+        // 2. Construimos el objeto inicializando los arreglos con el tamaño exacto
+        RegresionMultipleRequest request = RegresionMultipleRequest.builder()
                 .numeroPuntos(puntos)
-                .valoresX1(new double[puntos])
-                .valoresX2(new double[puntos])
+                .valoresX1(new double[puntos]) // Crea un arreglo de "puntos" posiciones lleno de 0.0
+                .valoresX2(new double[puntos]) 
                 .valoresY(new double[puntos])
                 .build();
+
+        // 3. Lo inyectamos al modelo con el MISMO nombre que usa el th:object del form.html
+        model.addAttribute("regresionMultipleDTO", request);
         
-        model.addAttribute("regresionMultipleDTO", dto);
-        model.addAttribute("title", "Regresión Lineal Múltiple");
-        return "views/ajuste-curvas/regresion-multiple/form";
+        return "views/ajuste-curvas/regresion-multiple/form"; 
+        // Nota: Asegúrate de que este return apunte a la ruta correcta de tu archivo html
     }
 
     @PostMapping("/regresion-multiple")
