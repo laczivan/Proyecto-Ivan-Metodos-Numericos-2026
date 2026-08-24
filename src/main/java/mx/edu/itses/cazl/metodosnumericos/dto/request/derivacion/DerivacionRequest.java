@@ -5,18 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO para capturar los parámetros de entrada del usuario
- * para el cálculo de diferenciación numérica.
- */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class DerivacionRequest {
-
-    private String funcion;       // Expresión matemática f(x)
-    private double x;             // Punto x0 a evaluar
-    private double h;             // Tamaño del incremento/paso h
-    private int ordenDerivada;    // Orden de la derivada (1, 2, 3 o 4)
+    private String funcion;
+    private double x;
+    private double h;
+    private int ordenDerivada;
+    
+    // Nuevos campos agregados
+    private String direccion;
+    private String exactitud;
 }

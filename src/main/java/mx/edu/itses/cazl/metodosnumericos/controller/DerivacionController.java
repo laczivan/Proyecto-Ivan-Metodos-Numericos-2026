@@ -35,7 +35,10 @@ public class DerivacionController {
                 .x(2.0)
                 .h(0.1)
                 .ordenDerivada(1)
+                .direccion("ADELANTE") // Valor por defecto
+                .exactitud("ESTANDAR") // Valor por defecto
                 .build();
+        
         model.addAttribute("derivacionRequest", request);
         return "views/derivacion/diferenciacion/form";
     }
